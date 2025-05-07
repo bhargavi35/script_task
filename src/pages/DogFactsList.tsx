@@ -79,63 +79,68 @@ export default function DogBreedsList() {
     }, [breeds, search, minWeight, maxWeight, minLife, maxLife]);
 
     return (
-        <Paper maw={900} mx="auto" mt={40} p="lg" withBorder>
-            <Title mb="md">Dog Breeds</Title>
-            <Group mb="md" spacing="md" align="end">
-                <TextInput
-                    label="Search"
-                    placeholder="Name or description"
-                    value={search}
-                    onChange={(e) => setSearch(e.target.value)}
-                />
-                <NumberInput
-                    label="Min Avg Weight (kg)"
-                    placeholder="Min"
-                    value={minWeight}
-                    onChange={(value) => setMinWeight(value === null ? "" : value)}
-                    min={0}
-                />
-                <NumberInput
-                    label="Max Avg Weight (kg)"
-                    placeholder="Max"
-                    value={maxWeight}
-                    onChange={(value) => setMaxWeight(value === null ? "" : value)}
-                    min={0}
-                />
-                <NumberInput
-                    label="Min Avg Lifespan (yrs)"
-                    placeholder="Min"
-                    value={minLife}
-                    onChange={(value) => setMinLife(value === null ? "" : value)}
-                    min={0}
-                />
-                <NumberInput
-                    label="Max Avg Lifespan (yrs)"
-                    placeholder="Max"
-                    value={maxLife}
-                    onChange={(value) => setMaxLife(value === null ? "" : value)}
-                    min={0}
-                />
-                <Tooltip label="Clear all filters">
-                    <ActionIcon
-                        color="red"
-                        variant="light"
-                        size="lg"
-                        onClick={clearFilters}
-                        aria-label="Clear filters"
-                        style={{ marginTop: 22 }}
-                    >
-                        Clear <IconX />
-                    </ActionIcon>
-                </Tooltip>
+        <Paper shadow="md" radius="md" p="xl" withBorder style={{ backgroundColor: '#fff' }}>
+            <Title mb="lg" order={2} align="center" style={{ color: '#444' }}>
+                🐾 Dog Breeds
+            </Title>
+            <Group mb="lg" position="apart" align="end">
+                <Group spacing="md">
+                    <TextInput
+                        label="Search"
+                        placeholder="Name or description"
+                        value={search}
+                        onChange={(e) => setSearch(e.target.value)}
+                    />
+                    <NumberInput
+                        label="Min Avg Weight (kg)"
+                        placeholder="Min"
+                        value={minWeight}
+                        onChange={(value) => setMinWeight(value === null ? "" : value)}
+                        min={0}
+                    />
+                    <NumberInput
+                        label="Max Avg Weight (kg)"
+                        placeholder="Max"
+                        value={maxWeight}
+                        onChange={(value) => setMaxWeight(value === null ? "" : value)}
+                        min={0}
+                    />
+                    <NumberInput
+                        label="Min Avg Lifespan (yrs)"
+                        placeholder="Min"
+                        value={minLife}
+                        onChange={(value) => setMinLife(value === null ? "" : value)}
+                        min={0}
+                    />
+                    <NumberInput
+                        label="Max Avg Lifespan (yrs)"
+                        placeholder="Max"
+                        value={maxLife}
+                        onChange={(value) => setMaxLife(value === null ? "" : value)}
+                        min={0}
+                    />
+
+                    <Tooltip label="Clear all filters">
+                        <ActionIcon
+                            color="red"
+                            variant="light"
+                            size="lg"
+                            onClick={clearFilters}
+                            aria-label="Clear filters"
+                            style={{ marginTop: 22 }}
+                        >
+                            Clear <IconX />
+                        </ActionIcon>
+                    </Tooltip>
+                </Group>
             </Group>
             {loading ? (
                 <Loader />
             ) : error ? (
                 <div style={{ color: "red" }}>Error: {error}</div>
             ) : (
-                <Table striped highlightOnHover>
-                    <thead>
+                <Table striped highlightOnHover withBorder withColumnBorders>
+                    <thead style={{ backgroundColor: '#f1f3f5' }}>
                         <tr>
                             <th>Name</th>
                             <th>Avg Weight (kg)</th>

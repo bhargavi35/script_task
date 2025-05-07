@@ -1,5 +1,18 @@
 @use 'styles/abstracts';
 
+body {
+  font-family: 'Inter', sans-serif;
+  background-color: #f9f9f9;
+  color: #2e2e2e;
+  margin: 0;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+
 .blue-div {
   background-color: abstracts.$darkblue;
 }
@@ -40,7 +53,8 @@ h3 {
   font-size: abstracts.$heading4;
 }
 
-p, li {
+p,
+li {
   font-size: abstracts.$paragraph1;
 }
 
@@ -52,12 +66,13 @@ p, li {
   font-size: abstracts.$paragraph3;
 }
 
-input, input::placeholder {
+input,
+input::placeholder {
   font-size: abstracts.$paragraph1;
 }
 
 
-@media(max-width: 600px){
+@media(max-width: 600px) {
   .display1 {
     font-size: abstracts.$displayMob1;
   }
@@ -79,7 +94,8 @@ input, input::placeholder {
     font-size: abstracts.$headingMob3;
   }
 
-  p, li {
+  p,
+  li {
     font-size: abstracts.$paragraphMob1;
   }
 
@@ -91,4 +107,3 @@ input, input::placeholder {
     font-size: abstracts.$paragraphMob3;
   }
 }
-

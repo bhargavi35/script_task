@@ -13,7 +13,7 @@ export default function Login() {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (login(username, password)) {
-      navigate("/facts");
+      navigate("/breeds");
     } else {
       setError("Invalid credentials");
     }
@@ -22,7 +22,8 @@ export default function Login() {
   return (
     <Paper maw={340} mx="auto" mt={100} p="md" withBorder>
       <Title align="center" mb="md">Login</Title>
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={handleSubmit}
+        className="max-w-md mx-auto mt-20 p-6 border rounded shadow-lg bg-white">
         <TextInput
           label="Username"
           value={username}

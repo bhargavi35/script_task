@@ -9,7 +9,9 @@ export default function Landing() {
 
   return (
     <Paper maw={500} mx="auto" mt={100} p="lg" withBorder>
-      <Title align="center" mb="md">Welcome to Dog Facts App</Title>
+      <Title align="center" order={2} mb="md" style={{ color: '#333' }}>
+        🐶 Welcome to Dog Facts App
+      </Title>
       {isAuthenticated ? (
         <>
           <Button fullWidth mb="sm" onClick={() => navigate("/breeds")}>
