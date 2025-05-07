@@ -1,43 +1,27 @@
-import React from "react";
-import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+// src/App.tsx
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Landing from "./pages/landing/Landing";
-import DogFactsList from "./pages/DogFactsList";
-import DogFactDetail from "./pages/DogFactDetail";
-import Login from "./pages/Login";
-import { useAuthStore } from "./store/app.store";
+import Login from "./pages/auth/Login";
+import DogBreedsList from "./pages/DogFactsList";
+import DogBreedDetail from "./pages/DogFactDetail";
+import ProtectedRoute from "./components/ProtectedRoute";
 import Navbar from "./components/Navbar";
 
-const PrivateRoute = ({ children }: { children: JSX.Element }) => {
-  const { isAuthenticated } = useAuthStore();
-  return isAuthenticated ? children : <Navigate to="/login" replace />;
-};
-
-function App() {
+export default function App() {
   return (
-    <BrowserRouter>
-    <Navbar/>
+    <Router>
+      <Navbar/>
       <Routes>
         <Route path="/" element={<Landing />} />
         <Route path="/login" element={<Login />} />
-        <Route
-          path="/breeds"
-          element={
-            <PrivateRoute>
-              <DogFactsList />
-            </PrivateRoute>
-          }
-        />
-        <Route
-          path="/breeds/:id"
-          element={
-            <PrivateRoute>
-              <DogFactDetail />
-            </PrivateRoute>
-          }
-        />
+
+        <Route element={<ProtectedRoute />}>
+          <Route path="/breeds" element={<DogBreedsList />} />
+          <Route path="/breeds/:id" element={<DogBreedDetail />} />
+        </Route>
+
+        <Route path="*" element={<Landing />} />
       </Routes>
-    </BrowserRouter>
+    </Router>
   );
 }
-
-export default App;

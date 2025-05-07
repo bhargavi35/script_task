@@ -1,48 +1,47 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { useAuthStore } from '../../store/app.store';
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { TextInput, PasswordInput, Button, Paper, Title } from "@mantine/core";
+import { useAuthStore } from "../../store/app.store";
 
-const Login = () => {
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
-  const login = useAuthStore((state) => state.login);
+export default function Login() {
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
+  const login = useAuthStore((s) => s.login);
   const navigate = useNavigate();
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    // Call login with both username and password
-    const success = login(username, password);
-    if (success) {
-      navigate('/resources');
+    if (login(username, password)) {
+      navigate("/breeds");
     } else {
-      alert("Invalid credentials");
+      setError("Invalid credentials");
     }
   };
 
   return (
-    <form onSubmit={handleSubmit} className="max-w-md mx-auto p-4">
-      <h2 className="text-xl mb-4">Login</h2>
-      <input
-        type="text"
-        placeholder="Username"
-        value={username}
-        onChange={(e) => setUsername(e.target.value)}
-        required
-        className="mb-2 w-full p-2 border rounded"
-      />
-      <input
-        type="password"
-        placeholder="Password"
-        value={password}
-        onChange={(e) => setPassword(e.target.value)}
-        required
-        className="mb-4 w-full p-2 border rounded"
-      />
-      <button type="submit" className="bg-blue-600 text-white px-4 py-2 rounded">
-        Login
-      </button>
-    </form>
+    <Paper maw={340} mx="auto" mt={100} p="md" withBorder>
+      <Title align="center" mb="md">Login</Title>
+      <form onSubmit={handleSubmit}
+        className="max-w-md mx-auto mt-20 p-6 border rounded shadow-lg bg-white">
+        <TextInput
+          label="Username"
+          value={username}
+          onChange={(e) => setUsername(e.target.value)}
+          required
+        />
+        <PasswordInput
+          label="Password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          required
+          mt="md"
+        />
+        {error && <div style={{ color: "red", marginTop: 8 }}>{error}</div>}
+        <Button fullWidth mt="xl" type="submit">
+          Login
+        </Button>
+      </form>
+    </Paper>
   );
-};
-
-export default Login;
+}

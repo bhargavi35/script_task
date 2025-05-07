@@ -60,7 +60,7 @@ yarn dev
 4. **Login Credentials**
 
 * Username: `admin`
-* Password: `admin`
+* Password: `admin123`
 
 ---
 

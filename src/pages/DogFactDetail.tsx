@@ -57,7 +57,7 @@ export default function DogBreedDetail() {
             <Title mb="md">{name}</Title>
             <Card shadow="sm" padding="lg" radius="md" withBorder>
                 {imgData?.message && (
-                    <Image src={imgData.message} height={200} alt="Dog" mb="md" />
+                    <Image src={imgData.message} height={200} alt={`Image of ${name}`} mb="md" />
                 )}
                 <Text size="md" mb="sm">
                     {description}
