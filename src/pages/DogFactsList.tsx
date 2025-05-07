@@ -39,6 +39,8 @@ export default function DogBreedsList() {
     const [maxWeight, setMaxWeight] = useState<number | "">("");
     const [minLife, setMinLife] = useState<number | "">("");
     const [maxLife, setMaxLife] = useState<number | "">("");
+    const [sortBy, setSortBy] = useState<"name" | "weight" | "life" | null>(null);
+    const [sortDirection, setSortDirection] = useState<"asc" | "desc">("asc");
     const navigate = useNavigate();
     const [currentPage, setCurrentPage] = useState(1);
     const itemsPerPage = 10;
@@ -53,11 +55,34 @@ export default function DogBreedsList() {
         setMaxWeight("");
         setMinLife("");
         setMaxLife("");
+        setSortBy(null);
+        setSortDirection("asc");
     };
+
+    // Sorting logic
+    const sortedBreeds = useMemo(() => {
+        const breedList = [...breeds];
+        if (sortBy) {
+            breedList.sort((a, b) => {
+                const aValue = sortBy === "name" ? a.attributes.name :
+                    sortBy === "weight" ? (a.attributes.male_weight.min + a.attributes.female_weight.min) / 2 :
+                        (a.attributes.life.min + a.attributes.life.max) / 2;
+                const bValue = sortBy === "name" ? b.attributes.name :
+                    sortBy === "weight" ? (b.attributes.male_weight.min + b.attributes.female_weight.min) / 2 :
+                        (b.attributes.life.min + b.attributes.life.max) / 2;
+                if (sortDirection === "asc") {
+                    return aValue > bValue ? 1 : -1;
+                } else {
+                    return aValue < bValue ? 1 : -1;
+                }
+            });
+        }
+        return breedList;
+    }, [breeds, sortBy, sortDirection]);
 
     // Filtering logic
     const filteredBreeds = useMemo(() => {
-        return breeds.filter((breed) => {
+        return sortedBreeds.filter((breed) => {
             const { name, description, life, male_weight, female_weight } =
                 breed.attributes;
             const matchSearch =
@@ -83,7 +108,7 @@ export default function DogBreedsList() {
 
             return matchSearch && matchWeight && matchLife;
         });
-    }, [breeds, search, minWeight, maxWeight, minLife, maxLife]);
+    }, [sortedBreeds, search, minWeight, maxWeight, minLife, maxLife]);
 
     const paginatedBreeds = useMemo(() => {
         const start = (currentPage - 1) * itemsPerPage;
@@ -168,9 +193,15 @@ export default function DogBreedsList() {
                         }}
                     >
                         <tr>
-                            <th>Name</th>
-                            <th>Avg Weight (kg)</th>
-                            <th>Avg Lifespan (yrs)</th>
+                            <th>
+                                <Button variant="link" onClick={() => setSortBy("name")}>Name</Button>
+                            </th>
+                            <th>
+                                <Button variant="link" onClick={() => setSortBy("weight")}>Avg Weight (kg)</Button>
+                            </th>
+                            <th>
+                                <Button variant="link" onClick={() => setSortBy("life")}>Avg Lifespan (yrs)</Button>
+                            </th>
                             <th>Hypoallergenic</th>
                             <th>Action</th>
                         </tr>
