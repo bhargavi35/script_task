@@ -42,7 +42,10 @@ export default function DogBreedDetail() {
         error: imgError,
     } = useApi<DogImageApiResponse>("https://dog.ceo/api/breeds/image/random");
 
-    if (breedLoading || imgLoading) return <Loader />;
+    if (breedLoading || imgLoading) return <div className="center-loader">
+        <Loader size="lg" />
+    </div>;
+    
     if (breedError) return <div style={{ color: "red" }}>Error: {breedError}</div>;
     if (!breedData) return <div>No breed found.</div>;
 

@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import {
     Table,
     TextInput,
@@ -10,6 +10,8 @@ import {
     Group,
     Tooltip,
     ActionIcon,
+    Pagination,
+    useMantineTheme
 } from "@mantine/core";
 import { IconX } from "@tabler/icons-react";
 import { useNavigate } from "react-router-dom";
@@ -38,6 +40,11 @@ export default function DogBreedsList() {
     const [minLife, setMinLife] = useState<number | "">("");
     const [maxLife, setMaxLife] = useState<number | "">("");
     const navigate = useNavigate();
+    const [currentPage, setCurrentPage] = useState(1);
+    const itemsPerPage = 10;
+
+    const theme = useMantineTheme();
+    const isDark = theme.colorScheme === "dark";
 
     // Clear all filters
     const clearFilters = () => {
@@ -78,9 +85,22 @@ export default function DogBreedsList() {
         });
     }, [breeds, search, minWeight, maxWeight, minLife, maxLife]);
 
+    const paginatedBreeds = useMemo(() => {
+        const start = (currentPage - 1) * itemsPerPage;
+        const end = start + itemsPerPage;
+        return filteredBreeds.slice(start, end);
+    }, [filteredBreeds, currentPage]);
+
+    useEffect(() => {
+        setCurrentPage(1);
+    }, [search, minWeight, maxWeight, minLife, maxLife]);
+
     return (
-        <Paper shadow="md" radius="md" p="xl" withBorder style={{ backgroundColor: '#fff' }}>
-            <Title mb="lg" order={2} align="center" style={{ color: '#444' }}>
+        <Paper shadow="md" radius="md" p="xl" withBorder
+            style={{
+                backgroundColor: isDark ? theme.colors.dark[6] : theme.white,
+            }}>
+            <Title mb="lg" order={2} align="center" color={isDark ? "gray.3" : "gray.8"}>
                 🐾 Dog Breeds
             </Title>
             <Group mb="lg" position="apart" align="end">
@@ -135,12 +155,18 @@ export default function DogBreedsList() {
                 </Group>
             </Group>
             {loading ? (
-                <Loader />
+                <div className="center-loader">
+                    <Loader size="lg" />
+                </div>
             ) : error ? (
-                <div style={{ color: "red" }}>Error: {error}</div>
+                <div style={{ color: theme.colors.red[6] }}>Error: {error}</div>
             ) : (
                 <Table striped highlightOnHover withBorder withColumnBorders>
-                    <thead style={{ backgroundColor: '#f1f3f5' }}>
+                    <thead
+                        style={{
+                            backgroundColor: isDark ? theme.colors.dark[5] : theme.colors.gray[1],
+                        }}
+                    >
                         <tr>
                             <th>Name</th>
                             <th>Avg Weight (kg)</th>
@@ -150,14 +176,14 @@ export default function DogBreedsList() {
                         </tr>
                     </thead>
                     <tbody>
-                        {filteredBreeds.length === 0 ? (
+                        {paginatedBreeds.length === 0 ? (
                             <tr>
                                 <td colSpan={5} style={{ textAlign: "center" }}>
                                     No breeds found.
                                 </td>
                             </tr>
                         ) : (
-                            filteredBreeds.map((breed) => {
+                            paginatedBreeds.map((breed) => {
                                 const {
                                     name,
                                     life,
@@ -194,6 +220,15 @@ export default function DogBreedsList() {
                         )}
                     </tbody>
                 </Table>
+            )}
+            {filteredBreeds.length > itemsPerPage && (
+                <Group position="center" mt="md">
+                    <Pagination
+                        total={Math.ceil(filteredBreeds.length / itemsPerPage)}
+                        value={currentPage}
+                        onChange={setCurrentPage}
+                    />
+                </Group>
             )}
         </Paper>
     );
